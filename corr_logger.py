@@ -33,8 +33,11 @@ def fperiod(freq,baseline,decln,latitude):
     # Adjust for declination and local latitude
     # Takes longer for source to transit through 'fwidth' at higher
     # declinations
-    # We assume a simple east-west baseline, so don't have to consider
-    #  the effective declination of the baseline itself.
     #
     fwidth /= math.cos(math.radians(decln))
     return fwidth
+
+def getalpha(corner, srate):
+    q = math.pow(math.e,-2.0*(corner/srate))
+    alpha = 1.0 - q
+    return alpha
