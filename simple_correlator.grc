@@ -66,7 +66,7 @@ blocks:
   id: variable
   parameters:
     comment: Fringe period (secs)
-    value: corr_logger.fperiod(freq,baseline,decln,latitude)
+    value: ra_funcs.fperiod(freq,baseline,decln,latitude)
   states:
     bus_sink: false
     bus_source: false
@@ -241,15 +241,7 @@ blocks:
       \ ltp.tm_mday)\n    filestr = fn+\"-\"+filestr+\".csv\"\n    fp = open(filestr,\
       \ \"a\")\n    fp.write(\"%02d,%02d,%02d,\" % (ltp.tm_hour, ltp.tm_min, ltp.tm_sec))\n\
       \    fp.write(\"%-11.9f,%-11.9f\\n\" % (val.real, val.imag))\n    fp.close()\n\
-      \    return None\n    \ndef fperiod(freq,baseline,decln,latitude):\n    C=299792000.0\n\
-      \    Lambda = C/freq\n    #\n    # Convert baseline into fringe-spacing in degrees\n\
-      \    #\n    fwidth= (math.degrees(Lambda))/baseline\n    \n    #\n    # 240\
-      \ seconds (4 minutes) per degree on the celestial equator\n    #\n    fwidth\
-      \ *= (4.0 * 60.0)\n    \n    #\n    # Adjust for declination and local latitude\n\
-      \    # Takes longer for source to transit through 'fwidth' at higher\n    #\
-      \ declinations\n    #\n    fwidth /= math.cos(math.radians(decln))\n    return\
-      \ fwidth\n\ndef getalpha(corner, srate):\n    q = math.pow(math.e,-2.0*(corner/srate))\n\
-      \    alpha = 1.0 - q\n    return alpha\n"
+      \    return None\n"
   states:
     bus_sink: false
     bus_source: false
@@ -376,6 +368,19 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [288, 12]
+    rotation: 0
+    state: enabled
+- name: import_1_0_0
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: import ra_funcs
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [400, 20.0]
     rotation: 0
     state: enabled
 - name: latitude
@@ -831,7 +836,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    alpha: corr_logger.getalpha(1.0/2.0,corr_rate)
+    alpha: ra_funcs.getalpha(1.0/2.0,corr_rate)
     comment: 'Simple integrator via
 
       IIR filter'
@@ -851,7 +856,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    alpha: corr_logger.getalpha(1.0/fperiod,corr_rate)
+    alpha: ra_funcs.getalpha(1.0/fperiod,corr_rate)
     comment: 'Longer-period integrator
 
       Forms the lower half of
